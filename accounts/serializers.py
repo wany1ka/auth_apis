@@ -11,14 +11,14 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'password', 'role']
 
     def create(self, validated_data):
-        user = CustomUser.objects.create(
+        employee = CustomUser.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
             role=validated_data['role']
         )
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+        employee.set_password(validated_data['password'])
+        employee.save()
+        return employee
 
     def update(self, instance, validated_data):
         instance.username = validated_data.get('username', instance.username)
@@ -39,15 +39,15 @@ class LoginSerializer(serializers.Serializer):
         
         if email and password:
             try:
-                user = CustomUser.objects.get(email=email)
+                employee = CustomUser.objects.get(email=email)
             except CustomUser.DoesNotExist:
                 raise serializers.ValidationError("Invalid email or password.")
             
-            if user.check_password(password):
-                if user.is_active:
-                    data["user"] = user
+            if employee.check_password(password):
+                if employee.is_active:
+                    data["employee"] = employee
                 else:
-                    raise serializers.ValidationError("User is deactivated.")
+                    raise serializers.ValidationError("Employee is deactivated.")
             else:
                 raise serializers.ValidationError("Invalid email or password.")
         else:

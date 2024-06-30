@@ -20,7 +20,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
 
-User = get_user_model()
+Employee = get_user_model()
 
 class AdminOnlyView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
@@ -49,12 +49,12 @@ class ObtainTokenPairWithRoleView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data["user"]
-        refresh = RefreshToken.for_user(user)
+        employee = serializer.validated_data["employee"]
+        refresh = RefreshToken.for_user(employee)
         return Response({
             "refresh": str(refresh),
             "access": str(refresh.access_token),
-            "role": user.role
+            "role": employee.role
         })
         
 
@@ -73,19 +73,19 @@ class PasswordResetRequestView(APIView):
 def password_reset_confirm(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
+        employee = Employee.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, Employee.DoesNotExist):
+        employee = None
 
-    if user is not None and default_token_generator.check_token(user, token):
+    if employee is not None and default_token_generator.check_token(employee, token):
         if request.method == 'POST':
-            form = SetPasswordForm(user, request.POST)
+            form = SetPasswordForm(employee, request.POST)
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Your password has been reset successfully. You can now log in with your new password.')
                 return redirect('login')  # Redirect to login page after successful password reset
         else:
-            form = SetPasswordForm(user)
+            form = SetPasswordForm(employee)
 
         return render(request, 'password_reset_confirm.html', {'form': form})
     else:
