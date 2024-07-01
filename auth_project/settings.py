@@ -57,7 +57,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # react app's url
+    "http://localhost:5173",  # react app's url
 ]
 
 ROOT_URLCONF = 'auth_project.urls'
