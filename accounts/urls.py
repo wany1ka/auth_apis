@@ -14,4 +14,5 @@ urlpatterns = [
     path('api/inventory/', InventoryItemListCreateView.as_view(), name='inventory-list-create'),
     path('api/inventory/<int:pk>/', InventoryItemRetrieveUpdateDestroyView.as_view(), name='inventory-detail'),
     path('api/inventory/bulk/', BulkUpdateDeleteView.as_view(), name='inventory-bulk'),
+    path('api/inventory/bulk/delete/', InventoryBulkDeleteView.as_view(), name='inventory-bulk-delete'),
 ]

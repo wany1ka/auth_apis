@@ -128,6 +128,7 @@ class BulkUpdateDeleteView(APIView):
 
         return Response(response_data, status=status.HTTP_200_OK)
 
+class InventoryBulkDeleteView(APIView):
     def delete(self, request, *args, **kwargs):
         ids = request.data.get('ids', [])
         if not ids:

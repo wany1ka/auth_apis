@@ -1,13 +1,20 @@
-// src/App.js
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React from 'react';
 import './App.css';
-import Register from './components/register';
+import Inventory from './components/Inventory';
+import Register from "./components/Register";
+import Navbar from './components/navbar';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <Register />
-    </div>
+    <Router>
+    <Navbar />
+    <Routes>
+      <Route path="/" element={<Inventory />} />
+      <Route path="/register" element={<Register />} />
+     
+    </Routes>
+  </Router>
   );
 }
 

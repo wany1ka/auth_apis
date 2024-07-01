@@ -1,6 +1,6 @@
-// src/Register.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../styles/Register.css'
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -37,24 +37,24 @@ const Register = () => {
 
   return (
     <div className="register-container">
-      <h2>Register</h2>
+      <h2 className='font-bold text-lg'>Register</h2>
       {success ? (
         <p>Registration successful!</p>
       ) : (
         <form onSubmit={handleSubmit}>
-          <div>
+          <div className="form-group">
             <label>Username:</label>
             <input type="text" name="username" value={formData.username} onChange={handleChange} required />
           </div>
-          <div>
+          <div className="form-group">
             <label>Email:</label>
             <input type="email" name="email" value={formData.email} onChange={handleChange} required />
           </div>
-          <div>
+          <div className="form-group">
             <label>Password:</label>
             <input type="password" name="password" value={formData.password} onChange={handleChange} required />
           </div>
-          <div>
+          <div className="form-group">
             <label>Role:</label>
             <input type="text" name="role" value={formData.role} onChange={handleChange} required />
           </div>
