@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,8 +8,8 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth import get_user_model
 
-from .models import CustomUser
-from .serializers import CustomUserSerializer, LoginSerializer, PasswordResetSerializer
+from .models import CustomUser, InventoryItem
+from .serializers import CustomUserSerializer, LoginSerializer, PasswordResetSerializer, InventoryItemSerializer
 from django.contrib.auth.tokens import default_token_generator
 
 from rest_framework import generics
@@ -95,3 +95,50 @@ def password_reset_confirm(request, uidb64, token):
     else:
         messages.error(request, 'The password reset link is invalid or has expired.')
         return redirect('password_reset')  # Redirect to password reset request page
+    
+class InventoryItemListCreateView(generics.ListCreateAPIView):
+    queryset = InventoryItem.objects.all()
+    serializer_class = InventoryItemSerializer
+
+class InventoryItemRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = InventoryItem.objects.all()
+    serializer_class = InventoryItemSerializer
+
+class BulkUpdateDeleteView(APIView):
+    def put(self, request, *args, **kwargs):
+        items_data = request.data
+        response_data = []
+
+        for item_data in items_data:
+            item_id = item_data.get('id')
+            if not item_id:
+                continue
+
+            try:
+                item = InventoryItem.objects.get(id=item_id)
+            except InventoryItem.DoesNotExist:
+                return Response({"error": f"Item with id {item_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+            serializer = InventoryItemSerializer(item, data=item_data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                response_data.append(serializer.data)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
+    def delete(self, request, *args, **kwargs):
+        ids = request.data.get('ids', [])
+        if not ids:
+            return Response({"error": "No IDs provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Ensure all IDs exist before deletion
+        existing_ids = InventoryItem.objects.filter(id__in=ids).values_list('id', flat=True)
+        non_existing_ids = set(ids) - set(existing_ids)
+
+        if non_existing_ids:
+            return Response({"error": f"Items with IDs {list(non_existing_ids)} do not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+        InventoryItem.objects.filter(id__in=ids).delete()
+        return Response({"status": "deleted"}, status=status.HTTP_204_NO_CONTENT)

@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, InventoryItem
 from django.contrib.auth.forms import PasswordResetForm
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -71,3 +71,18 @@ class PasswordResetSerializer(serializers.Serializer):
             email_template_name='registration/password_reset_email.html',
             request=request,
         )
+
+class InventoryItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InventoryItem
+        fields = '__all__'
+
+    def validate_quantity(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Quantity must be non-negative.")
+        return value
+
+    def validate_price(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Price must be non-negative.")
+        return value
