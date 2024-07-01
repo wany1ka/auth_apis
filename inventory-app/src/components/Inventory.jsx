@@ -41,7 +41,7 @@ const Inventory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/inventory/', formData);
+      const response = await axios.post('http://127.0.0.1:8000/accounts/api/inventory/', formData);
       console.log('Item created:', response.data);
       fetchInventoryItems(); // Refresh the inventory list after creating an item
       setFormData({
