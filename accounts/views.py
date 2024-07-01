@@ -15,7 +15,7 @@ from django.contrib.auth.tokens import default_token_generator
 from rest_framework import generics
 from .models import CustomUser
 from .serializers import CustomUserSerializer
-from .permissions import IsAdminUser, IsStaffUser
+from .permissions import IsAdminUser, IsManagerUser, IsEmployeeUser
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
@@ -30,7 +30,11 @@ class AdminOnlyView(generics.ListCreateAPIView):
 class StaffOnlyView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [IsStaffUser]
+    permission_classes = [IsManagerUser]
+class EmployeeOnlyView(generics.ListCreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsEmployeeUser]
 
 
 class UserListCreateView(generics.ListCreateAPIView):

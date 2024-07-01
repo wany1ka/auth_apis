@@ -4,6 +4,10 @@ class IsAdminUser(BasePermission):
     def has_permission(self, request, view):
         return request.employee and request.employee.role in ['admin', 'superadmin']
 
-class IsStaffUser(BasePermission):
+class IsManagerUser(BasePermission):
     def has_permission(self, request, view):
         return request.employee and request.employee.role == 'manager'
+
+class IsEmployeeUser(BasePermission):
+    def has_permission(self, request, view):
+        return request.employee and request.employee.role == 'employee'
