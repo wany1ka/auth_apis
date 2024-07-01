@@ -2,7 +2,6 @@ from django.urls import path, include
 from accounts.views import *
 
 
-
 urlpatterns = [
     path('api/users/', UserListCreateView.as_view(), name='employee-list-create'),
     path('token/', ObtainTokenPairWithRoleView.as_view(), name='token_obtain_pair'),
@@ -15,4 +14,5 @@ urlpatterns = [
     path('api/inventory/<int:pk>/', InventoryItemRetrieveUpdateDestroyView.as_view(), name='inventory-detail'),
     path('api/inventory/bulk/', BulkUpdateDeleteView.as_view(), name='inventory-bulk'),
     path('api/inventory/bulk/delete/', InventoryBulkDeleteView.as_view(), name='inventory-bulk-delete'),
+    path('api/inventory/', InventoryListCreateView.as_view(), name='inventory-list-create'),
 ]

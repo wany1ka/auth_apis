@@ -13,12 +13,15 @@ from .serializers import CustomUserSerializer, LoginSerializer, PasswordResetSer
 from django.contrib.auth.tokens import default_token_generator
 
 from rest_framework import generics
-from .models import CustomUser
-from .serializers import CustomUserSerializer
+from .models import *
+from .serializers import *
 from .permissions import IsAdminUser, IsManagerUser, IsEmployeeUser
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
+
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import InventoryItemFilter
 
 Employee = get_user_model()
 
@@ -143,3 +146,9 @@ class InventoryBulkDeleteView(APIView):
 
         InventoryItem.objects.filter(id__in=ids).delete()
         return Response({"status": "deleted"}, status=status.HTTP_204_NO_CONTENT)
+    
+class InventoryListCreateView(generics.ListCreateAPIView):
+    queryset = InventoryItem.objects.all()
+    serializer_class = InventoryItemSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = InventoryItemFilter
