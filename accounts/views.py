@@ -99,9 +99,7 @@ def password_reset_confirm(request, uidb64, token):
         messages.error(request, 'The password reset link is invalid or has expired.')
         return redirect('password_reset')  # Redirect to password reset request page
     
-class InventoryItemListCreateView(generics.ListCreateAPIView):
-    queryset = InventoryItem.objects.all()
-    serializer_class = InventoryItemSerializer
+
 
 class InventoryItemRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = InventoryItem.objects.all()
@@ -152,3 +150,4 @@ class InventoryListCreateView(generics.ListCreateAPIView):
     serializer_class = InventoryItemSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = InventoryItemFilter
+

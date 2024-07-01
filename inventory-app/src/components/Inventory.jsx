@@ -12,10 +12,10 @@ const Inventory = () => {
   });
   const [filters, setFilters] = useState({
     name: '',
-    price_min: '',
-    price_max: '',
-    stock_min: '',
-    stock_max: '',
+    price_min: null,
+    price_max: null,
+    stock_min: null,
+    stock_max: null,
   });
 
   useEffect(() => {
@@ -24,7 +24,17 @@ const Inventory = () => {
 
   const fetchInventoryItems = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/accounts/api/inventory/', { params: filters });
+      // Remove empty filter values
+      const filteredParams = {};
+      for (const key in filters) {
+        if (filters[key] !== '' && filters[key] !== null) {
+          filteredParams[key] = filters[key];
+        }
+      }
+
+      const response = await axios.get('http://127.0.0.1:8000/accounts/api/inventory/', {
+        params: filteredParams,
+      });
       setInventoryItems(response.data);
     } catch (error) {
       console.error('Error fetching inventory items:', error);
@@ -98,13 +108,13 @@ const Inventory = () => {
         <label>Name:</label>
         <input type="text" name="name" value={filters.name} onChange={handleFilterChange} />
         <label>Price Min:</label>
-        <input type="number" name="price_min" value={filters.price_min} onChange={handleFilterChange} />
+        <input type="number" name="price_min" value={filters.price_min || ''} onChange={handleFilterChange} />
         <label>Price Max:</label>
-        <input type="number" name="price_max" value={filters.price_max} onChange={handleFilterChange} />
+        <input type="number" name="price_max" value={filters.price_max || ''} onChange={handleFilterChange} />
         <label>Stock Min:</label>
-        <input type="number" name="stock_min" value={filters.stock_min} onChange={handleFilterChange} />
+        <input type="number" name="stock_min" value={filters.stock_min || ''} onChange={handleFilterChange} />
         <label>Stock Max:</label>
-        <input type="number" name="stock_max" value={filters.stock_max} onChange={handleFilterChange} />
+        <input type="number" name="stock_max" value={filters.stock_max || ''} onChange={handleFilterChange} />
         <button onClick={fetchInventoryItems}>Apply Filters</button>
       </div>
       <ul className="inventory-list">
