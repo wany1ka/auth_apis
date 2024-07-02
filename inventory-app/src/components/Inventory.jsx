@@ -17,20 +17,24 @@ const Inventory = () => {
         stock_min: null,
         stock_max: null,
     });
+    const [sortParams, setSortParams] = useState({
+        sortBy: 'name',
+        sortOrder: 'asc',
+    });
 
     useEffect(() => {
         fetchInventoryItems();
-    }, [filters]); // Update inventory items when filters change
+    }, [filters, sortParams]); // Update inventory items when filters or sorting parameters change
 
     const fetchInventoryItems = async () => {
         try {
-            // Remove empty filter values
             const filteredParams = {};
             for (const key in filters) {
                 if (filters[key] !== '' && filters[key] !== null) {
                     filteredParams[key] = filters[key];
                 }
             }
+            filteredParams['ordering'] = `${sortParams.sortOrder === 'desc' ? '-' : ''}${sortParams.sortBy}`;
 
             const response = await axios.get('http://127.0.0.1:8000/accounts/api/inventory/', {
                 params: filteredParams,
@@ -82,9 +86,16 @@ const Inventory = () => {
         });
     };
 
+    const handleSortChange = (e) => {
+        setSortParams({
+            ...sortParams,
+            [e.target.name]: e.target.value,
+        });
+    };
+
     return (
         <div className="inventory-container">
-            <h2 className='font-bold text-lg'>Inventory Management</h2>
+            <h2 className="font-bold text-lg">Inventory Management</h2>
             <form onSubmit={handleSubmit} className="inventory-form">
                 <div className="form-group">
                     <label>Name:</label>
@@ -102,7 +113,7 @@ const Inventory = () => {
                     <label>Price:</label>
                     <input type="number" name="price" value={formData.price} onChange={handleChange} required />
                 </div>
-                <button type="submit" className='bg-blue-500 p-2 mb-5'>Add Item</button>
+                <button type="submit" className="bg-blue-500 p-2 mb-5">Add Item</button>
             </form>
             <div className="filters bg-gray-200 p-4 rounded-md mb-4">
                 <label className="block mb-2">Name:</label>
@@ -162,13 +173,38 @@ const Inventory = () => {
                 </button>
             </div>
 
+            <div className="sort bg-gray-200 p-4 rounded-md mb-4">
+                <label className="block mb-2">Sort By:</label>
+                <select
+                    name="sortBy"
+                    value={sortParams.sortBy}
+                    onChange={handleSortChange}
+                    className="border-gray-300 border p-2 rounded-md mb-2"
+                >
+                    <option value="name">Name</option>
+                    <option value="price">Price</option>
+                    <option value="quantity">Quantity</option>
+                </select>
+
+                <label className="block mb-2">Sort Order:</label>
+                <select
+                    name="sortOrder"
+                    value={sortParams.sortOrder}
+                    onChange={handleSortChange}
+                    className="border-gray-300 border p-2 rounded-md mb-2"
+                >
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
+
             <ul className="inventory-list">
                 {inventoryItems.map((item) => (
                     <li key={item.id} className="inventory-item">
                         <div className="inventory-item-details">
                             <strong>{item.name}</strong> - Quantity: {item.quantity}, Price: ${item.price}
                         </div>
-                        <button onClick={() => handleDelete(item.id)} className='px-2 py-1'>Delete</button>
+                        <button onClick={() => handleDelete(item.id)} className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-300">Delete</button>
                     </li>
                 ))}
             </ul>

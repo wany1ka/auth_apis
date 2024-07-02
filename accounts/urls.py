@@ -1,7 +1,6 @@
 from django.urls import path, include
 from accounts.views import *
 
-
 urlpatterns = [
     path('api/users/', UserListCreateView.as_view(), name='employee-list-create'),
     path('token/', ObtainTokenPairWithRoleView.as_view(), name='token_obtain_pair'),

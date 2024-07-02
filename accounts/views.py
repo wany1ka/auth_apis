@@ -8,8 +8,6 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth import get_user_model
 
-from .models import CustomUser, InventoryItem
-from .serializers import CustomUserSerializer, LoginSerializer, PasswordResetSerializer, InventoryItemSerializer
 from django.contrib.auth.tokens import default_token_generator
 
 from rest_framework import generics
@@ -150,4 +148,12 @@ class InventoryListCreateView(generics.ListCreateAPIView):
     serializer_class = InventoryItemSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = InventoryItemFilter
+    ordering_fields = ['name', 'price', 'quantity']
+    ordering = ['name']  # Default
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        ordering = self.request.query_params.get('ordering', None)
+        if ordering in self.ordering_fields:
+            queryset = queryset.order_by(ordering)
+        return queryset
