@@ -12,7 +12,7 @@ const Navbar = () => {
                     <li>
                         <Link to="/register" className="text-white hover:text-gray-300">Register</Link>
                     </li>
-                   
+
                 </ul>
             </div>
         </nav>

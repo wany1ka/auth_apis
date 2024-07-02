@@ -7,7 +7,7 @@ const Register = () => {
     username: '',
     email: '',
     password: '',
-    role: '', // Add role to form data
+    role: '', 
   });
 
   const [error, setError] = useState(null);

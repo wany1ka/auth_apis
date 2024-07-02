@@ -4,6 +4,7 @@ import './App.css';
 import Inventory from './components/Inventory';
 import Register from "./components/Register";
 import Navbar from './components/navbar';
+import ErrorPage from "./components/Error-page";
 
 const App = () => {
   return (
@@ -12,7 +13,8 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Inventory />} />
       <Route path="/register" element={<Register />} />
-     
+      <Route path="*" element={<ErrorPage />} />
+ 
     </Routes>
   </Router>
   );
