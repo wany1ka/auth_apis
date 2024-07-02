@@ -13,6 +13,10 @@ const Navbar = () => {
                         <Link to="/register" className="text-white hover:text-gray-300">Register</Link>
                     </li>
 
+                    <li>
+                        <Link to="/salesTrends" className="text-white hover:text-gray-300">Trends</Link>
+                    </li>
+
                 </ul>
             </div>
         </nav>

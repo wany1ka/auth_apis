@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import CustomUser, InventoryItem
+from .models import CustomUser, InventoryItem, Sales
 from django.contrib.auth.forms import PasswordResetForm
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -86,3 +86,9 @@ class InventoryItemSerializer(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError("Price must be non-negative.")
         return value
+
+class SalesSerializer(serializers.ModelSerializer):
+    product = serializers.PrimaryKeyRelatedField(queryset=InventoryItem.objects.all())
+    class Meta:
+        model = Sales
+        fields = '__all__'

@@ -157,3 +157,39 @@ class InventoryListCreateView(generics.ListCreateAPIView):
         if ordering in self.ordering_fields:
             queryset = queryset.order_by(ordering)
         return queryset
+    
+class InventoryItemList(APIView):
+    def get(self, request, format=None):
+        inventory_items = InventoryItem.objects.all()
+        serializer = InventoryItemSerializer(inventory_items, many=True)
+        return Response(serializer.data)
+
+class SalesList(APIView):
+    def get(self, request, format=None):
+        sales_data = Sales.objects.all()
+        serializer = SalesSerializer(sales_data, many=True)
+        return Response(serializer.data)
+    
+class StockLevelsReport(APIView):
+    def get(self, request, format=None):
+        inventory_items = InventoryItem.objects.all()
+        serializer = InventoryItemSerializer(inventory_items, many=True)
+        return Response(serializer.data)
+
+class SalesTrendsReport(APIView):
+    def get(self, request, format=None):
+        sales_data = Sales.objects.all()
+        total_sales_count = sales_data.count()
+        total_revenue = sum(sale.amount for sale in sales_data)
+
+        report_data = {
+            'total_sales_count': total_sales_count,
+            'total_revenue': total_revenue,
+        }
+        return Response(report_data)
+    
+class LowStockAlerts(APIView):
+    def get(self, request, format=None):
+        low_stock_items = InventoryItem.objects.filter(quantity__lt=10)  # Example condition for low stock
+        serializer = InventoryItemSerializer(low_stock_items, many=True)
+        return Response(serializer.data)

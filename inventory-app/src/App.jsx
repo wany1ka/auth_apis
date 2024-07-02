@@ -5,6 +5,7 @@ import Inventory from './components/Inventory';
 import Register from "./components/Register";
 import Navbar from './components/navbar';
 import ErrorPage from "./components/Error-page";
+import SalesTrends from "./components/SalesTrends";
 
 const App = () => {
   return (
@@ -13,8 +14,8 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Inventory />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/salesTrends" element={<SalesTrends />} />
       <Route path="*" element={<ErrorPage />} />
- 
     </Routes>
   </Router>
   );
