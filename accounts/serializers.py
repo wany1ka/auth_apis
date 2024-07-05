@@ -88,7 +88,8 @@ class InventoryItemSerializer(serializers.ModelSerializer):
         return value
 
 class SalesSerializer(serializers.ModelSerializer):
-    product = serializers.PrimaryKeyRelatedField(queryset=InventoryItem.objects.all())
+    item = serializers.PrimaryKeyRelatedField(queryset=InventoryItem.objects.all())
+
     class Meta:
         model = Sales
-        fields = '__all__'
+        fields = ['id', 'item', 'quantity', 'price', 'date']

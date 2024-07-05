@@ -4,12 +4,6 @@ import '../styles/Inventory.css';
 
 const Inventory = () => {
     const [inventoryItems, setInventoryItems] = useState([]);
-    const [formData, setFormData] = useState({
-        name: '',
-        description: '',
-        quantity: 0,
-        price: 0,
-    });
     const [filters, setFilters] = useState({
         name: '',
         price_min: null,
@@ -45,30 +39,6 @@ const Inventory = () => {
         }
     };
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post('http://127.0.0.1:8000/accounts/api/inventory/', formData);
-            console.log('Item created:', response.data);
-            fetchInventoryItems(); // Refresh the inventory list after creating an item
-            setFormData({
-                name: '',
-                description: '',
-                quantity: 0,
-                price: 0,
-            });
-        } catch (error) {
-            console.error('Error creating item:', error);
-        }
-    };
-
     const handleDelete = async (id) => {
         try {
             await axios.delete(`http://127.0.0.1:8000/accounts/api/inventory/${id}/`);
@@ -96,106 +66,90 @@ const Inventory = () => {
     return (
         <div className="inventory-container">
             <h2 className="font-bold text-lg">Inventory Management</h2>
-            <form onSubmit={handleSubmit} className="inventory-form">
-                <div className="form-group">
-                    <label>Name:</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-                </div>
-                <div className="form-group">
-                    <label>Description:</label>
-                    <input type="text" name="description" value={formData.description} onChange={handleChange} />
-                </div>
-                <div className="form-group">
-                    <label>Quantity:</label>
-                    <input type="number" name="quantity" value={formData.quantity} onChange={handleChange} required />
-                </div>
-                <div className="form-group">
-                    <label>Price:</label>
-                    <input type="number" name="price" value={formData.price} onChange={handleChange} required />
-                </div>
-                <button type="submit" className="bg-blue-500 p-2 mb-5">Add Item</button>
-            </form>
-            <div className="filters bg-gray-200 p-4 rounded-md mb-4">
-                <label className="block mb-2">Name:</label>
-                <input
-                    type="text"
-                    name="name"
-                    value={filters.name}
-                    onChange={handleFilterChange}
-                    className="border-gray-300 border p-2 rounded-md mb-2"
-                />
 
-                <label className="block mb-2">Price Range:</label>
-                <div className="flex mb-2">
+            <div className="filters-sort-container">
+                <div className="filters bg-gray-200 p-4 rounded-md mb-4 mr-4 flex">
+                    <label className="block mb-2">Name:</label>
                     <input
-                        type="number"
-                        name="price_min"
-                        value={filters.price_min || ''}
+                        type="text"
+                        name="name"
+                        value={filters.name}
                         onChange={handleFilterChange}
-                        placeholder="Min"
-                        className="border-gray-300 border p-2 rounded-l-md flex-1 mr-1"
-                    />
-                    <input
-                        type="number"
-                        name="price_max"
-                        value={filters.price_max || ''}
-                        onChange={handleFilterChange}
-                        placeholder="Max"
-                        className="border-gray-300 border p-2 rounded-r-md flex-1 ml-1"
-                    />
+                        className="border-gray-300 border rounded-lg p-0 flex-none mr-1 mb-1"
+                    />  
+
+                    <label className="block mb-2">Price Range:</label>
+                    <div className="block mb-2">
+                        <input
+                            type="number"
+                            name="price_min"
+                            value={filters.price_min || ''}
+                            onChange={handleFilterChange}
+                            placeholder="Min"
+                            className="border-gray-300 border p-1 rounded-lg flex-1 mr-1 mb-1"
+                        />
+                        <input
+                            type="number"
+                            name="price_max"
+                            value={filters.price_max || ''}
+                            onChange={handleFilterChange}
+                            placeholder="Max"
+                            className="border-gray-300 border p-1 rounded-lg flex-1 mr-1 mb-1"
+                        />
+                    </div> 
+
+                    <label className="block mb-2">Stock Range:</label>
+                    <div className="block mb-2">
+                        <input
+                            type="number"
+                            name="stock_min"
+                            value={filters.stock_min || ''}
+                            onChange={handleFilterChange}
+                            placeholder="Min"
+                            className="border-gray-300 border p-1 rounded-lg flex-1 mr-1 mb-1"
+                        />
+                        <input
+                            type="number"
+                            name="stock_max"
+                            value={filters.stock_max || ''}
+                            onChange={handleFilterChange}
+                            placeholder="Max"
+                            className="border-gray-300 border p-1 rounded-lg flex-1 mr-1 "
+                        />
+                    </div>
+
+                    <button
+                        onClick={fetchInventoryItems}
+                        className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+                    >
+                        Apply Filters
+                    </button>
                 </div>
 
-                <label className="block mb-2">Stock Range:</label>
-                <div className="flex mb-2">
-                    <input
-                        type="number"
-                        name="stock_min"
-                        value={filters.stock_min || ''}
-                        onChange={handleFilterChange}
-                        placeholder="Min"
-                        className="border-gray-300 border p-2 rounded-l-md flex-1 mr-1"
-                    />
-                    <input
-                        type="number"
-                        name="stock_max"
-                        value={filters.stock_max || ''}
-                        onChange={handleFilterChange}
-                        placeholder="Max"
-                        className="border-gray-300 border p-2 rounded-r-md flex-1 ml-1"
-                    />
+                <div className="sort bg-gray-200 p-4 rounded-md mb-4 flex">
+                    <label className="block mb-2">Sort By:</label>
+                    <select
+                        name="sortBy"
+                        value={sortParams.sortBy}
+                        onChange={handleSortChange}
+                        className="border-gray-300 border p-1 rounded-lg pr-4 mr-1 "
+                    >
+                        <option value="name">Name</option>
+                        <option value="price">Price</option>
+                        <option value="quantity">Quantity</option>
+                    </select>
+
+                    <label className="block ml-2">Sort Order:</label>
+                    <select
+                        name="sortOrder"
+                        value={sortParams.sortOrder}
+                        onChange={handleSortChange}
+                        className="border-gray-300 border p-1 rounded-lg pr-3 mr-1 mb-1"
+                    >
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
                 </div>
-
-                <button
-                    onClick={fetchInventoryItems}
-                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
-                >
-                    Apply Filters
-                </button>
-            </div>
-
-            <div className="sort bg-gray-200 p-4 rounded-md mb-4">
-                <label className="block mb-2">Sort By:</label>
-                <select
-                    name="sortBy"
-                    value={sortParams.sortBy}
-                    onChange={handleSortChange}
-                    className="border-gray-300 border p-2 rounded-md mb-2"
-                >
-                    <option value="name">Name</option>
-                    <option value="price">Price</option>
-                    <option value="quantity">Quantity</option>
-                </select>
-
-                <label className="block mb-2">Sort Order:</label>
-                <select
-                    name="sortOrder"
-                    value={sortParams.sortOrder}
-                    onChange={handleSortChange}
-                    className="border-gray-300 border p-2 rounded-md mb-2"
-                >
-                    <option value="asc">Ascending</option>
-                    <option value="desc">Descending</option>
-                </select>
             </div>
 
             <ul className="inventory-list">

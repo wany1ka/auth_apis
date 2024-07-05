@@ -17,6 +17,14 @@ const Navbar = () => {
                         <Link to="/salesTrends" className="text-white hover:text-gray-300">Trends</Link>
                     </li>
 
+                    <li>
+                        <Link to="/inventory" className="text-white hover:text-gray-300">Inventory</Link>
+                    </li>
+
+                    <li>
+                        <Link to="/sales" className="text-white hover:text-gray-300">Sales</Link>
+                    </li>
+
                 </ul>
             </div>
         </nav>

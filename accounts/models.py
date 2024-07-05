@@ -23,10 +23,10 @@ class InventoryItem(models.Model):
         return self.name
 
 class Sales(models.Model):
-    name = models.ForeignKey(InventoryItem, on_delete=models.CASCADE)
-    quantity_sold = models.PositiveIntegerField()
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    sale_date = models.DateField()
+    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.name} - {self.quantity_sold}"
+        return f"Sale of {self.item.name} on {self.date}"

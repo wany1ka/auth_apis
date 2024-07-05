@@ -32,6 +32,7 @@ class StaffOnlyView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [IsManagerUser]
+
 class EmployeeOnlyView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
@@ -169,7 +170,18 @@ class SalesList(APIView):
         sales_data = Sales.objects.all()
         serializer = SalesSerializer(sales_data, many=True)
         return Response(serializer.data)
-    
+
+    def post(self, request, format=None):
+        serializer = SalesSerializer(data=request.data)
+        if serializer.is_valid():
+            sale = serializer.save()
+            # Update inventory quantity
+            item = sale.item
+            item.quantity -= sale.quantity
+            item.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class StockLevelsReport(APIView):
     def get(self, request, format=None):
         inventory_items = InventoryItem.objects.all()
