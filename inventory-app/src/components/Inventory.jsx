@@ -40,12 +40,14 @@ const Inventory = () => {
     };
 
     const handleDelete = async (id) => {
-        try {
-            await axios.delete(`http://127.0.0.1:8000/accounts/api/inventory/${id}/`);
-            console.log('Item deleted:', id);
-            fetchInventoryItems(); // Refresh the inventory list after deleting an item
-        } catch (error) {
-            console.error('Error deleting item:', error);
+        if (window.confirm('Are you sure you want to delete this item?')) {
+            try {
+                await axios.delete(`http://127.0.0.1:8000/accounts/api/inventory/${id}/`);
+                console.log('Item deleted:', id);
+                fetchInventoryItems(); // Refresh the inventory list after deleting an item
+            } catch (error) {
+                console.error('Error deleting item:', error);
+            }
         }
     };
 
