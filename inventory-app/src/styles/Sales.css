@@ -1,0 +1,16 @@
+.sales-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.sales-form {
+    margin-bottom: 20px;
+}
+
+.sales-item {
+    padding: 10px 0;
+}
+
+.sales-item + .sales-item {
+    border-top: 1px solid #ddd;
+}

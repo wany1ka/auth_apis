@@ -8,13 +8,15 @@ import ErrorPage from "./components/Error-page";
 import SalesTrends from "./components/SalesTrends";
 import AddInventory from "./components/AddInventory";
 import Sales from "./components/Sales";
+import Home from "./components/Home";
 
 const App = () => {
   return (
     <Router>
     <Navbar />
     <Routes>
-      <Route path="/" element={<AddInventory />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/add" element={<AddInventory />} />
       <Route path="/register" element={<Register />} />
       <Route path="/salesTrends" element={<SalesTrends />} />
       <Route path="/inventory" element={<Inventory />} />
