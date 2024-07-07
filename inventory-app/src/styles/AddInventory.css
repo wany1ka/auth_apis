@@ -47,30 +47,3 @@ button:hover {
     background-color: #0056b3;
 }
 
-.inventory-list {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
-}
-
-.inventory-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.inventory-item-details {
-    flex-grow: 1;
-}
-
-.inventory-item button {
-    background-color: #dc3545;
-    color: white;
-    margin-left: 20px;
-}
-
-.inventory-item button:hover {
-    background-color: #c82333;
-}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/Sales.css';
-import SalesTrends from './SalesTrends';
 
 const Sales = () => {
     const [sales, setSales] = useState([]);
@@ -104,7 +103,6 @@ const Sales = () => {
                     </li>
                 ))}
             </ul>
-            <SalesTrends sales={sales} inventory={inventoryItems} />
         </div>
     );
 };

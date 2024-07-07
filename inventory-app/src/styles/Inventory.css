@@ -66,14 +66,10 @@ button:hover {
 }
 
 .inventory-item button {
-  background-color: #dc3545;
   color: white;
   margin-left: 20px;
 }
 
-.inventory-item button:hover {
-  background-color: #c82333;
-}
 
 .filters-sort-container {
   gap: 20px;

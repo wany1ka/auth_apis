@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../styles/Inventory.css';
+// import '../styles/Inventory.css';
 
 const Inventory = () => {
     const [inventoryItems, setInventoryItems] = useState([]);
@@ -103,28 +103,30 @@ const Inventory = () => {
 
     return (
         <div className="inventory-container">
-            <h2 className="font-bold text-lg">Inventory Management</h2>
+            <h2 className="font-bold text-2xl mb-6 text-gray-800">Inventory Management</h2>
 
-            <div className="filters-sort-container">
-                <div className="filters bg-gray-200 p-4 rounded-md mb-4 mr-4 flex">
-                    <label className="block mb-2">Name:</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={filters.name}
-                        onChange={handleFilterChange}
-                        className="border-gray-300 border rounded-lg p-0 flex-none mr-1 mb-1"
-                    />  
+            <div className="filters-sort-container bg-gray-200 rounded-lg p-4 mb-6">
+                <div className="filters flex flex-wrap mb-4">
+                    <div className="filter-item flex items-center mr-4 mb-2">
+                        <label className="text-gray-700 mr-2">Name:</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={filters.name}
+                            onChange={handleFilterChange}
+                            className="border-gray-300 border rounded-lg p-1 w-48"
+                        />  
+                    </div>
 
-                    <label className="block mb-2">Price Range:</label>
-                    <div className="block mb-2">
+                    <div className="filter-item flex items-center mr-4 mb-2">
+                        <label className="text-gray-700 mr-2">Price Range:</label>
                         <input
                             type="number"
                             name="price_min"
                             value={filters.price_min || ''}
                             onChange={handleFilterChange}
                             placeholder="Min"
-                            className="border-gray-300 border p-1 rounded-lg flex-1 mr-1 mb-1"
+                            className="border-gray-300 border rounded-lg p-1 w-24 mr-1"
                         />
                         <input
                             type="number"
@@ -132,19 +134,19 @@ const Inventory = () => {
                             value={filters.price_max || ''}
                             onChange={handleFilterChange}
                             placeholder="Max"
-                            className="border-gray-300 border p-1 rounded-lg flex-1 mr-1 mb-1"
+                            className="border-gray-300 border rounded-lg p-1 w-24"
                         />
                     </div> 
 
-                    <label className="block mb-2">Stock Range:</label>
-                    <div className="block mb-2">
+                    <div className="filter-item flex items-center mr-4 mb-2">
+                        <label className="text-gray-700 mr-2">Stock Range:</label>
                         <input
                             type="number"
                             name="stock_min"
                             value={filters.stock_min || ''}
                             onChange={handleFilterChange}
                             placeholder="Min"
-                            className="border-gray-300 border p-1 rounded-lg flex-1 mr-1 mb-1"
+                            className="border-gray-300 border rounded-lg p-1 w-24 mr-1"
                         />
                         <input
                             type="number"
@@ -152,37 +154,37 @@ const Inventory = () => {
                             value={filters.stock_max || ''}
                             onChange={handleFilterChange}
                             placeholder="Max"
-                            className="border-gray-300 border p-1 rounded-lg flex-1 mr-1 "
+                            className="border-gray-300 border rounded-lg p-1 w-24"
                         />
                     </div>
 
                     <button
                         onClick={fetchInventoryItems}
-                        className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+                        className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 ml-2"
                     >
                         Apply Filters
                     </button>
                 </div>
 
-                <div className="sort bg-gray-200 p-4 rounded-md mb-4 flex">
-                    <label className="block mb-2">Sort By:</label>
+                <div className="sort flex items-center">
+                    <label className="text-gray-700 mr-2">Sort By:</label>
                     <select
                         name="sortBy"
                         value={sortParams.sortBy}
                         onChange={handleSortChange}
-                        className="border-gray-300 border p-1 rounded-lg pr-4 mr-1 "
+                        className="border-gray-300 border rounded-lg p-1 w-24 mr-4"
                     >
                         <option value="name">Name</option>
                         <option value="price">Price</option>
                         <option value="quantity">Quantity</option>
                     </select>
 
-                    <label className="block ml-2">Sort Order:</label>
+                    <label className="text-gray-700 mr-2">Sort Order:</label>
                     <select
                         name="sortOrder"
                         value={sortParams.sortOrder}
                         onChange={handleSortChange}
-                        className="border-gray-300 border p-1 rounded-lg pr-3 mr-1 mb-1"
+                        className="border-gray-300 border rounded-lg p-1 w-24"
                     >
                         <option value="asc">Ascending</option>
                         <option value="desc">Descending</option>
@@ -192,19 +194,24 @@ const Inventory = () => {
 
             <ul className="inventory-list">
                 {inventoryItems.map((item) => (
-                    <li key={item.id} className="inventory-item">
-                        <div className="inventory-item-details">
-                            <strong>{item.name}</strong> - Quantity: {item.quantity}, Price: ${item.price}
+                    <li key={item.id} className="inventory-item bg-white shadow-md rounded-lg p-4 mb-4">
+                        <div className="flex justify-between items-center mb-2">
+                            <div className="flex flex-col">
+                                <strong className="text-xl text-gray-800 mb-1">{item.name}</strong>
+                                <span className="text-sm text-gray-600">Quantity: {item.quantity}, Price: ${item.price}</span>
+                            </div>
+                            <div className="flex">
+                                <button onClick={() => handleEdit(item)} className="bg-amber-500 text-white px-2 py-1 rounded-md hover:bg-amber-600 transition duration-300 mr-2">Edit</button>
+                                <button onClick={() => handleDelete(item.id)} className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-300">Delete</button>
+                            </div>
                         </div>
-                        <button onClick={() => handleEdit(item)} className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 transition duration-300">Edit</button>
-                        <button onClick={() => handleDelete(item.id)} className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-300">Delete</button>
-
+                        
                         {editingItem && editingItem.id === item.id && (
                             <div className="edit-form-container bg-gray-100 p-4 rounded-md mt-4">
-                                <h3 className="font-bold text-lg mb-2">Edit Inventory Item</h3>
+                                <h3 className="font-bold text-lg mb-2 text-gray-800">Edit Inventory Item</h3>
                                 <form onSubmit={handleEditSubmit}>
                                     <div className="form-group mb-2">
-                                        <label className="block mb-1">Name:</label>
+                                        <label className="block mb-1 text-gray-700">Name:</label>
                                         <input
                                             type="text"
                                             name="name"
@@ -215,7 +222,7 @@ const Inventory = () => {
                                         />
                                     </div>
                                     <div className="form-group mb-2">
-                                        <label className="block mb-1">Description:</label>
+                                        <label className="block mb-1 text-gray-700">Description:</label>
                                         <textarea
                                             name="description"
                                             value={editFormData.description}
@@ -224,7 +231,7 @@ const Inventory = () => {
                                         ></textarea>
                                     </div>
                                     <div className="form-group mb-2">
-                                        <label className="block mb-1">Quantity:</label>
+                                        <label className="block mb-1 text-gray-700">Quantity:</label>
                                         <input
                                             type="number"
                                             name="quantity"
@@ -235,7 +242,7 @@ const Inventory = () => {
                                         />
                                     </div>
                                     <div className="form-group mb-2">
-                                        <label className="block mb-1">Price:</label>
+                                        <label className="block mb-1 text-gray-700">Price:</label>
                                         <input
                                             type="number"
                                             step="0.01"
@@ -246,12 +253,14 @@ const Inventory = () => {
                                             required
                                         />
                                     </div>
-                                    <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">
-                                        Save Changes
-                                    </button>
-                                    <button type="button" onClick={() => setEditingItem(null)} className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition duration-300 ml-2">
-                                        Cancel
-                                    </button>
+                                    <div className="flex">
+                                        <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">
+                                            Save Changes
+                                        </button>
+                                        <button type="button" onClick={() => setEditingItem(null)} className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition duration-300 ml-2">
+                                            Cancel
+                                        </button>
+                                    </div>
                                 </form>
                             </div>
                         )}

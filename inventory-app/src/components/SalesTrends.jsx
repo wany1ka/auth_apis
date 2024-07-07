@@ -1,106 +1,105 @@
-import React, { useEffect, useState } from 'react';
-import { Line, Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Bar, Pie } from 'react-chartjs-2';
 import '../styles/SalesTrends.css';
 
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-);
-
-const SalesTrends = ({ sales, inventory }) => {
-    const [salesData, setSalesData] = useState({});
-    const [profitData, setProfitData] = useState({});
-    const [stockData, setStockData] = useState({});
+const SalesTrends = () => {
+    const [sales, setSales] = useState([]);
+    const [inventoryItems, setInventoryItems] = useState([]);
 
     useEffect(() => {
-        prepareChartData();
-    }, [sales, inventory]);
+        fetchSales();
+        fetchInventoryItems();
+    }, []);
 
-    const prepareChartData = () => {
-        if (sales.length === 0 || inventory.length === 0) {
-            return;
+    const fetchSales = async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:8000/accounts/api/sales/');
+            setSales(response.data);
+        } catch (error) {
+            console.error('Error fetching sales:', error);
         }
-
-        const labels = sales.map(sale => sale.date);
-        const salesAmounts = sales.map(sale => sale.price * sale.quantity);
-        setSalesData({
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Sales Trends',
-                    data: salesAmounts,
-                    fill: false,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    tension: 0.1,
-                }
-            ]
-        });
-
-        const totalProfit = sales.reduce((acc, sale) => acc + sale.price * sale.quantity, 0);
-        const totalLosses = inventory.reduce((acc, item) => acc + item.price * item.quantity, 0) - totalProfit;
-        setProfitData({
-            labels: ['Profit', 'Losses'],
-            datasets: [
-                {
-                    data: [totalProfit, totalLosses],
-                    backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
-                }
-            ]
-        });
-
-        const stockLabels = inventory.map(item => item.name);
-        const stockQuantities = inventory.map(item => item.quantity);
-        setStockData({
-            labels: stockLabels,
-            datasets: [
-                {
-                    label: 'Stock Quantities',
-                    data: stockQuantities,
-                    backgroundColor: stockLabels.map(() => getRandomColor()),
-                }
-            ]
-        });
     };
 
-    const getRandomColor = () => {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
+    const fetchInventoryItems = async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:8000/accounts/api/inventory/');
+            setInventoryItems(response.data);
+        } catch (error) {
+            console.error('Error fetching inventory items:', error);
         }
-        return color;
+    };
+
+    const calculateTrends = () => {
+        // Placeholder for trend calculation logic
+        return {
+            labels: sales.map(sale => sale.date),
+            data: sales.map(sale => sale.quantity),
+        };
+    };
+
+    const trends = calculateTrends();
+
+    const barData = {
+        labels: trends.labels,
+        datasets: [
+            {
+                label: 'Sales Quantity',
+                backgroundColor: 'rgba(75,192,192,1)',
+                borderColor: 'rgba(0,0,0,1)',
+                borderWidth: 2,
+                data: trends.data,
+            },
+        ],
+    };
+
+    const pieData = {
+        labels: ['Profit', 'Loss', 'Stock'],
+        datasets: [
+            {
+                label: 'Sales Trends',
+                backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
+                hoverBackgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
+                data: [65, 59, 80], // Placeholder data
+            },
+        ],
     };
 
     return (
-        <div className="sales-trends-container bg-white shadow-md rounded-lg p-4">
-            <h3 className="font-bold text-xl mb-4">Sales Trends</h3>
-            {salesData.labels ? (
-                <Line data={salesData} />
-            ) : (
-                <p>No sales data available to display.</p>
-            )}
-
-            <h3 className="font-bold text-xl mt-8 mb-4">Profit and Losses</h3>
-            {profitData.labels ? (
-                <Pie data={profitData} />
-            ) : (
-                <p>No profit and losses data available to display.</p>
-            )}
-
-            <h3 className="font-bold text-xl mt-8 mb-4">Stock Quantities</h3>
-            {stockData.labels ? (
-                <Pie data={stockData} />
-            ) : (
-                <p>No stock data available to display.</p>
-            )}
+        <div className="sales-trends-container p-4">
+            <h2 className="font-bold text-2xl mb-4">Sales Trends</h2>
+            <div className="bar-chart mb-4">
+                <Bar
+                    data={barData}
+                    options={{
+                        title: {
+                            display: true,
+                            text: 'Sales Quantity Over Time',
+                            fontSize: 20,
+                        },
+                        legend: {
+                            display: true,
+                            position: 'right',
+                        },
+                    }}
+                />
+            </div>
+            <div className="pie-chart">
+                <Pie
+                    data={pieData}
+                    options={{
+                        title: {
+                            display: true,
+                            text: 'Profit, Loss, and Stock',
+                            fontSize: 20,
+                        },
+                        legend: {
+                            display: true,
+                            position: 'right',
+                        },
+                    }}
+                />
+            </div>
         </div>
     );
 };
