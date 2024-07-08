@@ -34,8 +34,10 @@ const SalesTrends = () => {
     };
 
     const calculateProfitAndLoss = () => {
-        const profit = sales.reduce((total, sale) => total + sale.price * sale.quantity, 0);
-        const loss = inventoryItems.reduce((total, item) => total + item.price * item.quantity, 0) - profit;
+        const totalSales = sales.reduce((total, sale) => total + sale.price * sale.quantity, 0);
+        const totalInventoryCost = inventoryItems.reduce((total, item) => total + item.price * item.quantity, 0);
+        const profit = totalSales - totalInventoryCost;
+        const loss = totalInventoryCost - totalSales;
 
         return {
             profit,
@@ -96,7 +98,9 @@ const SalesTrends = () => {
                     text: 'Sales Amount'
                 }
             }
-        }
+        },
+        maintainAspectRatio: false, // Allow chart to resize based on container
+        responsive: true // Ensure responsiveness
     };
 
     const pieOptions = {
@@ -105,22 +109,24 @@ const SalesTrends = () => {
                 display: true,
                 position: 'right',
             }
-        }
+        },
+        maintainAspectRatio: false, // Allow chart to resize based on container
+        responsive: true // Ensure responsiveness
     };
 
     return (
         <div className="sales-trends-container p-4">
-            <h2 className="font-bold text-2xl  mb-4">Sales Trends</h2>
-            <div className="chart-container mb-8">
+            <h2 className="font-bold text-2xl mb-4">Sales Trends</h2>
+            <div className="chart-container mb-20" style={{ height: '390px', width: '800px' }}>
                 <h3 className="font-bold text-xl mb-2">Sales Over Time</h3>
                 <Bar data={salesData} options={salesOptions} />
             </div>
-            <div className="chart-container mb-8">
-                <h3 className="font-bold text-xl mb-2">Profit and Loss</h3>
+            <div className="chart-container mb-20" style={{ height: '350px', width: '800px' }}>
+                <h3 className="font-bold text-xl mb-2 mt-6 text-center">Profit and Loss</h3>
                 <Pie data={profitAndLossData} options={pieOptions} />
             </div>
-            <div className="chart-container">
-                <h3 className="font-bold text-xl mb-2">Stock Items</h3>
+            <div className="chart-container" style={{ height: '350px', width: '800px' }}>
+                <h3 className="font-bold text-xl mb-2 text-center">Stock Items</h3>
                 <Pie data={stockData} options={pieOptions} />
             </div>
         </div>
