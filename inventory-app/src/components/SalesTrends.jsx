@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Chart, CategoryScale, LinearScale, BarElement, ArcElement, Legend, Tooltip } from 'chart.js';
 import { Bar, Pie } from 'react-chartjs-2';
 import axios from 'axios';
+
+// Registering necessary Chart.js components
+Chart.register(CategoryScale, LinearScale, BarElement, ArcElement, Legend, Tooltip);
 
 const SalesTrends = () => {
     const [sales, setSales] = useState([]);
@@ -95,6 +99,15 @@ const SalesTrends = () => {
         }
     };
 
+    const pieOptions = {
+        plugins: {
+            legend: {
+                display: true,
+                position: 'right',
+            }
+        }
+    };
+
     return (
         <div className="sales-trends-container p-4">
             <h2 className="font-bold text-2xl mb-4">Sales Trends</h2>
@@ -104,11 +117,11 @@ const SalesTrends = () => {
             </div>
             <div className="chart-container mb-8">
                 <h3 className="font-bold text-xl mb-2">Profit and Loss</h3>
-                <Pie data={profitAndLossData} />
+                <Pie data={profitAndLossData} options={pieOptions} />
             </div>
             <div className="chart-container">
                 <h3 className="font-bold text-xl mb-2">Stock Items</h3>
-                <Pie data={stockData} />
+                <Pie data={stockData} options={pieOptions} />
             </div>
         </div>
     );
