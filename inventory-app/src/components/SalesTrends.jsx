@@ -110,7 +110,7 @@ const SalesTrends = () => {
 
     return (
         <div className="sales-trends-container p-4">
-            <h2 className="font-bold text-2xl mb-4">Sales Trends</h2>
+            <h2 className="font-bold text-2xl  mb-4">Sales Trends</h2>
             <div className="chart-container mb-8">
                 <h3 className="font-bold text-xl mb-2">Sales Over Time</h3>
                 <Bar data={salesData} options={salesOptions} />

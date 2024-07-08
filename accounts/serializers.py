@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import CustomUser, InventoryItem, Sales
+from .models import *
 from django.contrib.auth.forms import PasswordResetForm
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -93,3 +93,8 @@ class SalesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sales
         fields = ['id', 'item', 'quantity', 'price', 'date']
+
+class ContactMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactMessage
+        fields = '__all__'

@@ -9,6 +9,7 @@ import SalesTrends from "./components/SalesTrends";
 import AddInventory from "./components/AddInventory";
 import Sales from "./components/Sales";
 import Home from "./components/Home";
+import ContactForm from "./components/ContactForm";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
       <Route path="/sales-trends" element={<SalesTrends />} />
       <Route path="/inventory" element={<Inventory />} />
       <Route path="/sales" element={<Sales />} />
+      <Route path="/contact" element={<ContactForm />} />
       <Route path="*" element={<ErrorPage />} />
     </Routes>
   </Router>

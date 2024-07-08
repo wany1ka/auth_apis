@@ -11,6 +11,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 
 from rest_framework import generics
+
 from .models import *
 from .serializers import *
 from .permissions import IsAdminUser, IsManagerUser, IsEmployeeUser
@@ -20,6 +21,8 @@ from django.contrib.auth.forms import SetPasswordForm
 
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import InventoryItemFilter
+from django.core.mail import send_mail
+
 
 Employee = get_user_model()
 
@@ -205,3 +208,26 @@ class LowStockAlerts(APIView):
         low_stock_items = InventoryItem.objects.filter(quantity__lt=10)  # Example condition for low stock
         serializer = InventoryItemSerializer(low_stock_items, many=True)
         return Response(serializer.data)
+
+class ContactMessageCreate(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = ContactMessageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+
+            # Optionally send email after saving to database
+            name = serializer.validated_data['name']
+            email = serializer.validated_data['email']
+            message = serializer.validated_data['message']
+
+            # Send email
+            send_mail(
+                'Contact Form Submission',
+                f'Name: {name}\nEmail: {email}\nMessage: {message}',
+                'markmaina425@gmail.com',  # Replace with your email
+                ['markmaina425@gmail.com'],  # Replace with recipient email
+                fail_silently=False,
+            )
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
