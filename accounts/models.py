@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.http import HttpResponse
+import csv
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
@@ -39,3 +41,16 @@ class ContactMessage(models.Model):
     def __str__(self):
         return f"Message from {self.name} ({self.email})"
     
+def export_inventory_csv(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="inventory.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['ID', 'Name', 'Quantity', 'Price'])
+
+    inventory_items = InventoryItem.objects.all().values_list('id', 'name', 'quantity', 'price')
+    for item in inventory_items:
+        writer.writerow(item)
+
+    return response

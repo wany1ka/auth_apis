@@ -101,10 +101,13 @@ const Inventory = () => {
         });
     };
 
+    const handleExportCSV = () => {
+        window.location.href = 'http://127.0.0.1:8000/accounts/api/export-inventory/';
+    };
+
     return (
         <div className="inventory-container">
             <h2 className="font-bold text-2xl mb-6 text-gray-800">Inventory Management</h2>
-
             <div className="filters-sort-container bg-gray-200 rounded-lg p-4 mb-6">
                 <div className="filters flex flex-wrap mb-4">
                     <div className="filter-item flex items-center mr-4 mb-2">
@@ -157,12 +160,10 @@ const Inventory = () => {
                             className="border-gray-300 border rounded-lg p-1 w-24"
                         />
                     </div>
-
-                    <button
-                        onClick={fetchInventoryItems}
-                        className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 ml-2"
-                    >
-                        Apply Filters
+                    <button 
+                        onClick={handleExportCSV} 
+                        className="bg-green-500 text-white ml-10 mt-3 py-1 px-2 rounded-md hover:bg-green-700 transition duration-300 mb-4">
+                            Export
                     </button>
                 </div>
 

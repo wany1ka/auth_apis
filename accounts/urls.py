@@ -17,5 +17,5 @@ urlpatterns = [
     path('reports/stock-levels/', StockLevelsReport.as_view(), name='stock-levels-report'),
     path('api/sales-trends-report/', SalesTrendsReport.as_view(), name='sales-trends-report'),
     path('reports/low-stock-alerts/', LowStockAlerts.as_view(), name='low-stock-alerts'),
-    path('api/contact/', ContactMessageCreate.as_view(), name='contact-message-create'),
+    path('api/export-inventory/', export_inventory_csv, name='export_inventory_csv'),
 ]
