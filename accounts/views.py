@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 
 from django.contrib.auth.tokens import default_token_generator
 
@@ -58,12 +58,12 @@ class ObtainTokenPairWithRoleView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        employee = serializer.validated_data["employee"]
-        refresh = RefreshToken.for_user(employee)
+        user = serializer.validated_data["user"]
+        refresh = RefreshToken.for_user(user)
         return Response({
             "refresh": str(refresh),
             "access": str(refresh.access_token),
-            "role": employee.role
+            "role": user.role
         })
         
 
@@ -224,8 +224,8 @@ class ContactMessageCreate(APIView):
             send_mail(
                 'Contact Form Submission',
                 f'Name: {name}\nEmail: {email}\nMessage: {message}',
-                'markmaina425@gmail.com',  # Replace with your email
-                ['markmaina425@gmail.com'],  # Replace with recipient email
+                'markmaina425@gmail.com', #your email
+                ['markmaina425@gmail.com'], #recipient email
                 fail_silently=False,
             )
 

@@ -32,22 +32,22 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
-    
+
     def validate(self, data):
         email = data.get("email", "")
         password = data.get("password", "")
-        
+
         if email and password:
             try:
-                employee = CustomUser.objects.get(email=email)
+                user = CustomUser.objects.get(email=email)
             except CustomUser.DoesNotExist:
                 raise serializers.ValidationError("Invalid email or password.")
-            
-            if employee.check_password(password):
-                if employee.is_active:
-                    data["employee"] = employee
+
+            if user.check_password(password):
+                if user.is_active:
+                    data["user"] = user
                 else:
-                    raise serializers.ValidationError("Employee is deactivated.")
+                    raise serializers.ValidationError("User is deactivated.")
             else:
                 raise serializers.ValidationError("Invalid email or password.")
         else:

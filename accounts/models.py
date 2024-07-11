@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.http import HttpResponse
 import csv
@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
     )
 
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='employee')
+    email = models.EmailField(unique=True)
 
 class InventoryItem(models.Model):
     name = models.CharField(max_length=255)
