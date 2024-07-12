@@ -26,18 +26,18 @@ from django.core.mail import send_mail
 
 Employee = get_user_model()
 
-class AdminOnlyView(generics.ListCreateAPIView):
-    queryset = CustomUser.objects.all()
+class AdminOnlyView(generics.ListAPIView):
+    queryset = CustomUser.objects.filter(role='admin')
     serializer_class = CustomUserSerializer
     permission_classes = [IsAdminUser]
 
-class StaffOnlyView(generics.ListCreateAPIView):
-    queryset = CustomUser.objects.all()
+class ManagerOnlyView(generics.ListAPIView):
+    queryset = CustomUser.objects.filter(role='manager')
     serializer_class = CustomUserSerializer
     permission_classes = [IsManagerUser]
 
-class EmployeeOnlyView(generics.ListCreateAPIView):
-    queryset = CustomUser.objects.all()
+class EmployeeOnlyView(generics.ListAPIView):
+    queryset = CustomUser.objects.filter(role='employee')
     serializer_class = CustomUserSerializer
     permission_classes = [IsEmployeeUser]
 
