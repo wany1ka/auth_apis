@@ -1,5 +1,3 @@
-// ContactForm.jsx
-
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -9,73 +7,51 @@ const ContactForm = () => {
         email: '',
         message: ''
     });
+    const [message, setMessage] = useState('');
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8000/api/contact/', formData);
-            alert('Email sent successfully!');
-            setFormData({ name: '', email: '', message: '' });
+            const response = await axios.post('http://localhost:8000/accounts/api/contact/', formData);
+            console.log('Message sent:', response.data);
+            setMessage('Message sent successfully!');
+            setFormData({
+                name: '',
+                email: '',
+                message: ''
+            });
         } catch (error) {
-            console.error('Failed to send email:', error);
-            alert('Failed to send email.');
+            console.error('Error sending message:', error);
+            setMessage('Error sending message.');
         }
     };
 
     return (
-        <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
-            <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+            <h2>Contact Us</h2>
+            <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Your Name"
-                        required
-                    />
+                    <label>Name:</label>
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} required />
                 </div>
                 <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Your Email"
-                        required
-                    />
+                    <label>Email:</label>
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} required />
                 </div>
                 <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-                    <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        rows={4}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Message"
-                        required
-                    />
+                    <label>Message:</label>
+                    <textarea name="message" value={formData.message} onChange={handleChange} required></textarea>
                 </div>
-                <button
-                    type="submit"
-                    className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Send
-                </button>
+                <button type="submit">Send Message</button>
             </form>
+            {message && <p>{message}</p>}
         </div>
     );
 };
