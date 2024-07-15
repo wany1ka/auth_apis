@@ -3,8 +3,10 @@ from accounts.views import *
 
 urlpatterns = [
     path('api/users/', UserListCreateView.as_view(), name='employee-list-create'),
+    path('api/user-info/', UserInfoView.as_view(), name='user-info'),
     path('token/', ObtainTokenPairWithRoleView.as_view(), name='token_obtain_pair'),
     path('admin-only/', AdminOnlyView.as_view(), name='admin-only'),
+    path('api/admin-users/', AdminUserListView.as_view(), name='admin-users'),
     path('manager-only/', ManagerOnlyView.as_view(), name='manager-only'),
     path('employee/', EmployeeOnlyView.as_view(), name='employee-view'),
     path('api/login/', ObtainTokenPairWithRoleView.as_view(), name='token_obtain_pair'),

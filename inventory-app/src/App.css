@@ -1,0 +1,18 @@
+/* App.css */
+
+.admin-dashboard-header {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-bottom: 1px solid #dee2e6;
+    text-align: center;
+}
+
+.admin-dashboard-header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+.admin-dashboard-header p {
+    margin: 10px 0 0;
+    color: #6c757d;
+}

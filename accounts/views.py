@@ -22,6 +22,8 @@ from django.contrib.auth.forms import SetPasswordForm
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import InventoryItemFilter
 from django.core.mail import send_mail
+from django.db.models import Count, Sum
+from django.db.models.functions import TruncDay
 
 
 Employee = get_user_model()
@@ -231,3 +233,22 @@ class ContactMessageCreate(APIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class UserInfoView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            'username': user.username,
+            'email': user.email,
+            'role': user.role
+        })
+    
+class AdminUserListView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        users = CustomUser.objects.all()
+        serializer = UserDetailSerializer(users, many=True)
+        return Response(serializer.data)
