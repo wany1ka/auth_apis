@@ -212,6 +212,11 @@ class LowStockAlerts(APIView):
         return Response(serializer.data)
 
 class ContactMessageCreate(APIView):
+    def get(self, request, *args, **kwargs):
+        messages = ContactMessage.objects.all()
+        serializer = ContactMessageSerializer(messages, many=True)
+        return Response(serializer.data)
+    
     def post(self, request, *args, **kwargs):
         serializer = ContactMessageSerializer(data=request.data)
         if serializer.is_valid():
@@ -252,3 +257,4 @@ class AdminUserListView(APIView):
         users = CustomUser.objects.all()
         serializer = UserDetailSerializer(users, many=True)
         return Response(serializer.data)
+    

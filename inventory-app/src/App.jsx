@@ -13,6 +13,7 @@ import Login from "./components/Login";
 import AdminDashboard from "./components/dashboards/AdminDashboard";
 import ManagerDashboard from "./components/dashboards/ManagerDashboard";
 import EmployeeDashboard from "./components/dashboards/EmployeeDashboard";
+import ContactMessages from "./components/Messages";
 
 const App = () => {
     const [role, setRole] = useState(localStorage.getItem('role'));
@@ -28,10 +29,9 @@ const App = () => {
         <Router>
             <Navbar role={role} />
             <Routes>
-                <Route path="/" element={<Inventory />} />
+                <Route path="/" element={<Login setRole={setRole} />} />
                 <Route path="/add" element={<AddInventory />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login setRole={setRole} />} />
                 <Route path="/sales-trends" element={<SalesTrends />} />
                 <Route path="/inventory" element={<Inventory />} />
                 <Route path="/sales" element={<Sales />} />
@@ -39,6 +39,7 @@ const App = () => {
                 <Route path="/admin-dashboard" element={<AdminDashboard />} />
                 <Route path="/manager-dashboard" element={<ManagerDashboard />} />
                 <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+                <Route path="/messages" element={<ContactMessages />} />
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
         </Router>

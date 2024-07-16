@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.http import HttpResponse
 import csv
+from django.contrib.auth import get_user_model
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
@@ -55,3 +56,4 @@ def export_inventory_csv(request):
         writer.writerow(item)
 
     return response
+

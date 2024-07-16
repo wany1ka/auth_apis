@@ -9,6 +9,7 @@ const Navbar = ({ role }) => {
                     <>
                         <li className='text-black hover:text-gray-500 mr-3'><Link to="/admin-dashboard">Admin Dashboard</Link></li>
                         <li className='hover:text-gray-500 mr-3'><Link to="/inventory">Inventory</Link></li>
+                        <li className='hover:text-gray-500 mr-3'><Link to="/activity">Activity</Link></li>
                         <li className='hover:text-gray-500 mr-3'><Link to="/sales">Sales</Link></li>
                         <li className='hover:text-gray-500 mr-3'><Link to="/sales-trends">Trends</Link></li>
                         <li className='hover:text-gray-500'><Link to="/register">Register</Link></li>
@@ -31,8 +32,7 @@ const Navbar = ({ role }) => {
                 )}
                 {!role && (
                     <>
-                        <li><Link to="/">Home</Link></li>
-                        <li><Link to="/login">Login</Link></li>
+                        <h1>Welcome</h1>
                     </>
                 )}
             </ul>
