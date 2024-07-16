@@ -8,12 +8,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'password', 'role']
+        fields = ['id', 'username', 'email', 'phone', 'password', 'role']
 
     def create(self, validated_data):
         employee = CustomUser.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
+            phone=validated_data['phone'],
             role=validated_data['role']
         )
         employee.set_password(validated_data['password'])
@@ -23,6 +24,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
+        instance.phone = validated_data.get('phone', instance.phone)
         instance.role = validated_data.get('role', instance.role)
         if 'password' in validated_data:
             instance.set_password(validated_data['password'])
@@ -92,7 +94,7 @@ class SalesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sales
-        fields = ['id', 'item', 'quantity', 'price', 'date']
+        fields = '__all__'
 
 class ContactMessageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -102,5 +104,5 @@ class ContactMessageSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'role', 'is_active', 'date_joined', 'last_login']
+        fields = '__all__'
     

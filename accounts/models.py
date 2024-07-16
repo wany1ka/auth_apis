@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.http import HttpResponse
 import csv
-from django.contrib.auth import get_user_model
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
@@ -14,7 +13,7 @@ class CustomUser(AbstractUser):
 
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='employee')
     email = models.EmailField(unique=True)
-
+    phone = models.CharField(max_length=20, blank=True, null=True)
 class InventoryItem(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -37,6 +36,7 @@ class Sales(models.Model):
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
+    phone = models.CharField(max_length=20, blank=True, null=True)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 

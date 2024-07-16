@@ -225,6 +225,7 @@ class ContactMessageCreate(APIView):
             # Optionally send email after saving to database
             name = serializer.validated_data['name']
             email = serializer.validated_data['email']
+            phone = serializer.validated_data['phone']
             message = serializer.validated_data['message']
 
             # Send email
@@ -247,6 +248,7 @@ class UserInfoView(APIView):
         return Response({
             'username': user.username,
             'email': user.email,
+            'phone': user.phone,
             'role': user.role
         })
     

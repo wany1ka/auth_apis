@@ -9,7 +9,13 @@ const ContactMessages = () => {
         const fetchMessages = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/accounts/api/contact/');
-                setMessages(response.data);
+                // Sort messages by created_at in descending order (newest first)
+                const sortedMessages = response.data.sort((a, b) => {
+                    if (a.created_at > b.created_at) return -1;
+                    if (a.created_at < b.created_at) return 1;
+                    return 0;
+                });
+                setMessages(sortedMessages);
             } catch (error) {
                 console.error('Error fetching messages:', error);
             }
@@ -30,6 +36,9 @@ const ContactMessages = () => {
                             </div>
                             <div>
                                 <strong className="font-semibold">Email:</strong> {message.email}
+                            </div>
+                            <div>
+                                <strong className="font-semibold">Phone:</strong> {message.phone}
                             </div>
                             <div>
                                 <strong className="font-semibold">Message:</strong> {message.message}

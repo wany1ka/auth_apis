@@ -5,6 +5,7 @@ const ContactForm = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        phone: '',
         message: ''
     });
     const [message, setMessage] = useState('');
@@ -25,6 +26,7 @@ const ContactForm = () => {
             setFormData({
                 name: '',
                 email: '',
+                phone: '',
                 message: ''
             });
         } catch (error) {
@@ -54,6 +56,17 @@ const ContactForm = () => {
                         type="email" 
                         name="email" 
                         value={formData.email} 
+                        onChange={handleChange} 
+                        required 
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+                <div>
+                    <label className="block text-gray-700">Phone</label>
+                    <input 
+                        type="phone" 
+                        name="phone" 
+                        value={formData.phone} 
                         onChange={handleChange} 
                         required 
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
