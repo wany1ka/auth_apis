@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.http import HttpResponse
 import csv
+from django.conf import settings
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (

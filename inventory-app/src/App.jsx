@@ -4,6 +4,7 @@ import './App.css';
 import Inventory from './components/Inventory';
 import Register from "./components/Register";
 import Navbar from './components/navbar';
+import Footer from "./components/Footer";
 import ErrorPage from "./components/Error-page";
 import SalesTrends from "./components/SalesTrends";
 import AddInventory from "./components/AddInventory";
@@ -42,6 +43,7 @@ const App = () => {
                 <Route path="/messages" element={<ContactMessages />} />
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
+            <Footer />
         </Router>
     );
 };

@@ -25,7 +25,7 @@ const ContactMessages = () => {
     }, []);
 
     return (
-        <div className="max-w-3xl mx-auto mt-8">
+        <div className="max-w-3xl mx-auto mt-8 mx-10">
             <h2 className="text-2xl font-bold mb-4">Contact Messages</h2>
             <ul className="divide-y divide-gray-300">
                 {messages.map(message => (
@@ -35,10 +35,14 @@ const ContactMessages = () => {
                                 <strong className="font-semibold">Name:</strong> {message.name}
                             </div>
                             <div>
-                                <strong className="font-semibold">Email:</strong> {message.email}
+                                <strong className="font-semibold">Email:</strong> <a className='hover:text-sky-500 ' href={`mailto:${message.email}`}>{message.email}</a><br />
                             </div>
                             <div>
-                                <strong className="font-semibold">Phone:</strong> {message.phone}
+                                {message.phone &&
+                                <>
+                                    <strong className="font-semibold">Phone:</strong> <a className='hover:text-sky-500 ' href={`tel:${message.phone}`}>{message.phone}</a><br />
+                                </>
+                                                        }
                             </div>
                             <div>
                                 <strong className="font-semibold">Message:</strong> {message.message}
