@@ -24,7 +24,8 @@ from .filters import InventoryItemFilter
 from django.core.mail import send_mail
 from django.db.models import Count, Sum
 from django.db.models.functions import TruncDay
-
+from datetime import timedelta
+from django.utils import timezone
 
 Employee = get_user_model()
 
@@ -193,24 +194,42 @@ class StockLevelsReport(APIView):
         serializer = InventoryItemSerializer(inventory_items, many=True)
         return Response(serializer.data)
 
-class SalesTrendsReport(APIView):
-    def get(self, request, format=None):
-        sales_data = Sales.objects.all()
-        total_sales_count = sales_data.count()
-        total_revenue = sum(sale.amount for sale in sales_data)
+class SalesTrendsAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        one_week_ago = timezone.now() - timedelta(days=7)
+        sales_data = Sales.objects.filter(date__gte=one_week_ago).values('date').annotate(
+            total_sales=Sum('quantity'),
+            total_revenue=Sum('price')
+        ).order_by('date')
 
-        report_data = {
-            'total_sales_count': total_sales_count,
-            'total_revenue': total_revenue,
-        }
-        return Response(report_data)
+        return Response(sales_data, status=status.HTTP_200_OK)
     
+class SalesListCreate(generics.ListCreateAPIView):
+    queryset = Sales.objects.all()
+    serializer_class = SalesSerializer
+
 class LowStockAlerts(APIView):
     def get(self, request, format=None):
-        low_stock_items = InventoryItem.objects.filter(quantity__lt=10)  # Example condition for low stock
+        low_stock_items = InventoryItem.objects.filter(quantity__lt=10)  # Assuming low stock threshold is 10
         serializer = InventoryItemSerializer(low_stock_items, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def post(self, request, format=None):
+        low_stock_items = InventoryItem.objects.filter(quantity__lt=10)
+        if low_stock_items:
+            # Prepare email content
+            message_content = '\n'.join([f'{item.name}: {item.quantity} in stock' for item in low_stock_items])
+            
+            # Send email
+            send_mail(
+                'Low Stock Alert',
+                f'The following items are low in stock:\n\n{message_content}',
+                'markmaina425@gmail.com',  # Replace with your email
+                ['markmaina425@gmail.com'],  # Replace with the recipient's email
+                fail_silently=False,
+            )
+            return Response({'message': 'Email sent successfully'}, status=status.HTTP_200_OK)
+        return Response({'message': 'No low stock items to report'}, status=status.HTTP_204_NO_CONTENT)
 class ContactMessageCreate(APIView):
     def get(self, request, *args, **kwargs):
         messages = ContactMessage.objects.all()

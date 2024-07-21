@@ -91,6 +91,7 @@ class InventoryItemSerializer(serializers.ModelSerializer):
 
 class SalesSerializer(serializers.ModelSerializer):
     item = serializers.PrimaryKeyRelatedField(queryset=InventoryItem.objects.all())
+    productName = serializers.CharField(source='item.name', read_only=True)
 
     class Meta:
         model = Sales
