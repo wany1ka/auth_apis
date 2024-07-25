@@ -15,12 +15,14 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='employee')
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
+
 class InventoryItem(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     last_updated = models.DateTimeField(auto_now=True)
+    last_modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='modified_inventory_items')
 
     def __str__(self):
         return self.name

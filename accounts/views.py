@@ -25,6 +25,8 @@ from django.core.mail import send_mail
 from django.db.models import Count, Sum
 from django.db.models.functions import TruncDay
 from datetime import timedelta
+import datetime
+
 from django.utils import timezone
 
 Employee = get_user_model()
@@ -171,6 +173,31 @@ class InventoryItemList(APIView):
         serializer = InventoryItemSerializer(inventory_items, many=True)
         return Response(serializer.data)
 
+    def put(self, request, pk):
+        try:
+            item = InventoryItem.objects.get(pk=pk)
+        except InventoryItem.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = InventoryItemSerializer(item, data=request.data, partial=True)
+        if serializer.is_valid():
+            # Update last_modified_by and last_modified_at
+            serializer.save(
+                last_modified_by=request.user,
+                last_modified_at=datetime.now()
+            )
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            item = InventoryItem.objects.get(pk=pk)
+        except InventoryItem.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        item.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class SalesList(APIView):
     def get(self, request, format=None):
         sales_data = Sales.objects.all()
@@ -278,4 +305,3 @@ class AdminUserListView(APIView):
         users = CustomUser.objects.all()
         serializer = UserDetailSerializer(users, many=True)
         return Response(serializer.data)
-    

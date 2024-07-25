@@ -75,6 +75,7 @@ class PasswordResetSerializer(serializers.Serializer):
         )
 
 class InventoryItemSerializer(serializers.ModelSerializer):
+    last_modified_by = serializers.StringRelatedField() 
     class Meta:
         model = InventoryItem
         fields = '__all__'
