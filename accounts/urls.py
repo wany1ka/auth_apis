@@ -1,7 +1,10 @@
-from django.urls import path, include
+from django.urls import path
 from accounts.views import *
+from django.urls import re_path
+from django.views.generic import TemplateView
 
 urlpatterns = [
+    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
     path('api/users/', UserListCreateView.as_view(), name='employee-list-create'),
     path('api/user-info/', UserInfoView.as_view(), name='user-info'),
     path('token/', ObtainTokenPairWithRoleView.as_view(), name='token_obtain_pair'),
