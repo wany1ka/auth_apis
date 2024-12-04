@@ -188,9 +188,6 @@ PASSWORD_RESET_EMAIL_TEMPLATE_NAME = 'registration/password_reset_email.html'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
-# {
-#     "email": "kibiezekiel@gmail.com"
-# }
 
 # Email configuration
 EMAIL_BACKEND = config('EMAIL_BACKEND')
