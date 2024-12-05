@@ -82,7 +82,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'auth_project.wsgi.application'
 
 
-# Database
+# Database info
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 # DATABASES = {
