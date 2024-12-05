@@ -58,7 +58,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://inventory-app-liard-delta.vercel.app", "http://localhost:5173/" # react app's url
+    "https://inventory-app-liard-delta.vercel.app", # react app's url
 ]
 
 ROOT_URLCONF = 'auth_project.urls'
